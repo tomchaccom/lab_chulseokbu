@@ -1,0 +1,15 @@
+
+
+# IntelliJ
+.idea/
+*.iml
+*.xml
+
+
+# Gradle
+.gradle/
+build/
+
+# OS
+.DS_Store
+
