@@ -29,6 +29,22 @@ public class Attendance {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="member_id")
     private Member member;
+    // 처음 객체를 생성할 때
+    @PrePersist
+    protected void onCreate() {
+        this.date = LocalDate.now();
+        this.startTime = LocalTime.now();
+        this.total = 0L;
+    }
 
+    // 객체 호출 시점에 사용하기
+    protected void startCount(){
+        this.startTime = LocalTime.now();
+    }
+    // 누적 시간의 합을 구하는 메소드
+    protected void calculateAttendance(LocalTime endTime){
+        long minutes = java.time.Duration.between(this.startTime, endTime).toMinutes();
+        this.total += minutes; // 누적
+    }
 
 }
