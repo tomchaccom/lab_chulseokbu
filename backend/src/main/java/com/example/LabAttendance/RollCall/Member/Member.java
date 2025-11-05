@@ -30,6 +30,13 @@ public class Member {
     private String password;
 
     @Column(nullable = false, unique = true)    //unique : 무조건 데이터가 달라야함.
+    @Column(nullable = false)
+    private String nickname;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
