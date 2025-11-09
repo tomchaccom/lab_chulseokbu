@@ -1,42 +1,39 @@
 package com.example.LabAttendance.RollCall.Member;
 
+import com.example.LabAttendance.RollCall.Member.DTO.MemberSignupRequestDto;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-
-
+import jakarta.validation.Valid;
+import com.example.LabAttendance.RollCall.Member.DTO.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lab_chulseokbu/user")
-
+@RequestMapping("/lab/users")
 public class MemberController
 {
     private final MemberService memberService;
 
-    @GetMapping("/signup")
-    public String signup(Member member)
-    {
-        return "signup_form";
-    }
+    // 1. GET 요청 제거 (API 서버이므로 폼 요청 제거)
+    /* @GetMapping("auth/sign/form") ... */
 
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> signup(@Validated @RequestBody Member member, BindingResult bindingResult) {
+    @PostMapping("/sign") // ⭐ URL 단축
+    public ResponseEntity<?> signup(@Valid @RequestBody MemberSignupRequestDto requestDto, BindingResult bindingResult) {
+
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body("입력값이 올바르지 않습니다.");
+            return ResponseEntity.badRequest().body(bindingResult.getFieldErrors());
         }
 
         try {
-            memberService.create(member);
+            MemberResponseDto responseDto = memberService.create(requestDto);
         } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage()); // 409 CONFLICT
         }
 
-        return ResponseEntity.ok("회원가입이 완료되었습니다.");
+        return ResponseEntity.status(HttpStatus.CREATED).body("회원가입이 완료되었습니다.");
     }
-
 }
