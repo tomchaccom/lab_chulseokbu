@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9b57c0a5-ffce-4e61-98b8-50537ce9e58a" name="변경" comment="Member 엔티티 Setter 추가" />
+    <list default="true" id="dc465a4f-007b-41a6-b56f-bf31764ada95" name="변경" comment="DuplicateEmailException 예외 코드 위치 이동">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/test/java/com/example/LabAttendance/RollCall/Member/MemberTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/example/LabAttendance/RollCall/Member/MemberRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/example/LabAttendance/RollCall/Member/MemberRepository.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,9 +23,6 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
-        <task path="$PROJECT_DIR$/backend">
-          <activation />
-        </task>
         <projects_view>
           <tree_state>
             <expand>
@@ -38,17 +40,14 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Record" />
+        <option value="Exception" />
+        <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="dev" />
-      </map>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -65,43 +64,27 @@
 }</component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: 4
+  &quot;associatedIndex&quot;: 6
 }</component>
-  <component name="ProjectId" id="3542Lqmgv81cyw9SUUrSA5W9PUn" />
+  <component name="ProjectId" id="35JF3P801oy7sLojT22yT6L8Ics" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Gradle.backend [:com.example.LabAttendance.RollCall.RollCallApplication.main()].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "dev",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/read2/intellj_project/lab_chulseokbu/lab_chulseokbu",
-    "project.structure.last.edited": "모듈",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.MemberRepositoryTests.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MemberTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.MemberTests.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.backend [:com.example.LabAttendance.RollCall.RollCallApplication.main()].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;back/kimmoCya/26&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RunManager">
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="RollCall" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="RollCall" />
-      <option name="filePath" />
-      <method v="2" />
-    </configuration>
-  </component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -111,160 +94,79 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="디폴트 작업">
-      <changelist id="9b57c0a5-ffce-4e61-98b8-50537ce9e58a" name="변경" comment="" />
-      <created>1762354970838</created>
+      <changelist id="dc465a4f-007b-41a6-b56f-bf31764ada95" name="변경" comment="" />
+      <created>1762820069079</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1762354970838</updated>
+      <updated>1762820069079</updated>
     </task>
-    <task id="LOCAL-00001" summary="Member 회원가입 컨트롤러 기본 틀 구현">
+    <task id="LOCAL-00001" summary="gradle 추가">
       <option name="closed" value="true" />
-      <created>1762355248075</created>
+      <created>1762874906287</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1762355248075</updated>
+      <updated>1762874906287</updated>
     </task>
-    <task id="LOCAL-00002" summary="Member 회원가입 서비스 기본 틀 구현">
+    <task id="LOCAL-00002" summary="LoginRequestDto 생성&#10;&#10;Login할 때 필요한 값 지정">
       <option name="closed" value="true" />
-      <created>1762355261059</created>
+      <created>1762874955934</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1762355261059</updated>
+      <updated>1762874955934</updated>
     </task>
-    <task id="LOCAL-00003" summary="Member 회원가입 리포지터리 기본 틀 구현">
+    <task id="LOCAL-00003" summary="LoginRequestDto 생성&#10;&#10;Login성공하면 응답하는 값 지정">
       <option name="closed" value="true" />
-      <created>1762355268105</created>
+      <created>1762874976175</created>
       <option name="number" value="00003" />
       <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
-      <updated>1762355268105</updated>
+      <updated>1762874976175</updated>
     </task>
-    <task id="LOCAL-00004" summary="Member 회원가입 컨트롤러 기본 틀 구현">
+    <task id="LOCAL-00004" summary="MemberNotFoundException 예외 생성&#10;&#10;이메일, 비밀번호(해시적용)이 없을 시 예외 리턴">
       <option name="closed" value="true" />
-      <created>1762355690450</created>
+      <created>1762875024662</created>
       <option name="number" value="00004" />
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
-      <updated>1762355690450</updated>
+      <updated>1762875024662</updated>
     </task>
-    <task id="LOCAL-00005" summary="Member 회원가입 서비스 기본 틀 구현">
+    <task id="LOCAL-00005" summary="Member 컨트롤러 로그인 구현&#10;&#10;로그인 컨트롤러 기능 추가">
       <option name="closed" value="true" />
-      <created>1762355702954</created>
+      <created>1762875127125</created>
       <option name="number" value="00005" />
       <option name="presentableId" value="LOCAL-00005" />
       <option name="project" value="LOCAL" />
-      <updated>1762355702954</updated>
+      <updated>1762875127125</updated>
     </task>
-    <task id="LOCAL-00006" summary="Member 회원가입 리포지터리 기본 틀 구현">
+    <task id="LOCAL-00006" summary="Member 서비스 로그인 구현&#10;&#10;findByEmail로 이메일 확인&#10;!passwordEncoder.matches(requestDto.password(), member.getPassword())&#10;로 비밀번호 일치 확인&#10;&#10;일치 시 인증토큰에 temp-jwt-token-for-user- + member.getID()하여 LoginResponseDto반환">
       <option name="closed" value="true" />
-      <created>1762355715656</created>
+      <created>1762875256091</created>
       <option name="number" value="00006" />
       <option name="presentableId" value="LOCAL-00006" />
       <option name="project" value="LOCAL" />
-      <updated>1762355715656</updated>
+      <updated>1762875256091</updated>
     </task>
-    <task id="LOCAL-00007" summary="Member 회원가입 리포지터리 기본 틀">
+    <task id="LOCAL-00007" summary="DuplicateEmailException 예외 코드 위치 이동">
       <option name="closed" value="true" />
-      <created>1762356544653</created>
+      <created>1762875283549</created>
       <option name="number" value="00007" />
       <option name="presentableId" value="LOCAL-00007" />
       <option name="project" value="LOCAL" />
-      <updated>1762356544653</updated>
+      <updated>1762875283549</updated>
     </task>
-    <task id="LOCAL-00008" summary="Member 회원가입 컨트롤러 기본 틀">
-      <option name="closed" value="true" />
-      <created>1762356962678</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1762356962678</updated>
-    </task>
-    <task id="LOCAL-00009" summary="Member 회원가입 서비스 기본 틀">
-      <option name="closed" value="true" />
-      <created>1762356971102</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1762356971102</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Member 회원가입 리포지터리 기본 틀">
-      <option name="closed" value="true" />
-      <created>1762356977894</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1762356977894</updated>
-    </task>
-    <task id="LOCAL-00011" summary="hash를 쓰기위한 gradle 추가">
-      <option name="closed" value="true" />
-      <created>1762596397037</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1762596397037</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Member 컨트롤러 구현&#10;&#10;매핑 및 회원가입 컨트롤러 구현">
-      <option name="closed" value="true" />
-      <created>1762596947915</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1762596947915</updated>
-    </task>
-    <task id="LOCAL-00013" summary="Member 서비스 구현&#10;&#10;비밀번호 해시 적용 후 DB에 저장하게 구현.">
-      <option name="closed" value="true" />
-      <created>1762596989768</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1762596989768</updated>
-    </task>
-    <task id="LOCAL-00014" summary="Member 리포지터리 구현&#10;&#10;이메일이 중복인지 확인하는 코드 구현.">
-      <option name="closed" value="true" />
-      <created>1762597008888</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1762597008888</updated>
-    </task>
-    <task id="LOCAL-00015" summary="Member 엔티티 Setter 추가">
-      <option name="closed" value="true" />
-      <created>1762598048319</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1762598048319</updated>
-    </task>
-    <option name="localTasksCounter" value="16" />
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Member 회원가입 컨트롤러 기본 틀 구현" />
-    <MESSAGE value="Member 회원가입 서비스 기본 틀 구현" />
-    <MESSAGE value="Member 회원가입 리포지터리 기본 틀 구현" />
-    <MESSAGE value="Member 리포지터리 기본 틀&#10;&#10;구현 X, 리포지터리를 이용하여 DB에 저장하는 역할" />
-    <MESSAGE value="Member 서비스 기본 틀&#10;&#10;코드 구현 X, 어떤 방식으로 동작해야하는지 주석 처리" />
-    <MESSAGE value="Member 회원가입 컨트롤러 기본 틀" />
-    <MESSAGE value="Member 회원가입 서비스 기본 틀" />
-    <MESSAGE value="Member 회원가입 리포지터리 기본 틀" />
-    <MESSAGE value="hash를 쓰기위한 gradle 추가" />
-    <MESSAGE value="Member 컨트롤러 구현&#10;&#10;매핑 및 회원가입 컨트롤러 구현" />
-    <MESSAGE value="Member 서비스 구현&#10;&#10;비밀번호 해시 적용 후 DB에 저장하게 구현." />
-    <MESSAGE value="Member 리포지터리 구현&#10;&#10;이메일이 중복인지 확인하는 코드 구현." />
-    <MESSAGE value="Member 엔티티 Setter 추가" />
-    <option name="LAST_COMMIT_MESSAGE" value="Member 엔티티 Setter 추가" />
+    <MESSAGE value="gradle 추가" />
+    <MESSAGE value="LoginRequestDto 생성&#10;&#10;Login할 때 필요한 값 지정" />
+    <MESSAGE value="LoginRequestDto 생성&#10;&#10;Login성공하면 응답하는 값 지정" />
+    <MESSAGE value="MemberNotFoundException 예외 생성&#10;&#10;이메일, 비밀번호(해시적용)이 없을 시 예외 리턴" />
+    <MESSAGE value="Member 컨트롤러 로그인 구현&#10;&#10;로그인 컨트롤러 기능 추가" />
+    <MESSAGE value="Member 서비스 로그인 구현&#10;&#10;findByEmail로 이메일 확인&#10;!passwordEncoder.matches(requestDto.password(), member.getPassword())&#10;로 비밀번호 일치 확인&#10;&#10;일치 시 인증토큰에 temp-jwt-token-for-user- + member.getID()하여 LoginResponseDto반환" />
+    <MESSAGE value="DuplicateEmailException 예외 코드 위치 이동" />
+    <option name="LAST_COMMIT_MESSAGE" value="DuplicateEmailException 예외 코드 위치 이동" />
   </component>
 </project>
