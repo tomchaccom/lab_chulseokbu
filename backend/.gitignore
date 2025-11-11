@@ -1,10 +1,7 @@
-
-
 # IntelliJ
 .idea/
 *.iml
 *.xml
-
 
 # Gradle
 .gradle/
@@ -13,3 +10,5 @@ build/
 # OS
 .DS_Store
 
+# Frontend (사용 안하니까 제외)
+frontend/
