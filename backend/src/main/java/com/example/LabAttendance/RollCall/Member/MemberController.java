@@ -43,6 +43,7 @@ public class MemberController
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
+
     @PostMapping("/login")
     public ResponseEntity<?> login
             (@Valid @RequestBody LoginRequestDto loginRequestDto,
