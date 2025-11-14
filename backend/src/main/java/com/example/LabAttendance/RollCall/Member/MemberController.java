@@ -23,14 +23,12 @@ public class MemberController
     public ResponseEntity<?> signup(@Valid @RequestBody MemberSignupRequestDto requestDto,
                                     BindingResult bindingResult)
     {
-
         if (bindingResult.hasErrors())
         {
             return ResponseEntity.badRequest().body(bindingResult.getFieldErrors());
         }
 
         MemberResponseDto responseDto;
-
         try
         {
             responseDto = memberService.create(requestDto);
@@ -39,7 +37,6 @@ public class MemberController
         {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
-
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
@@ -56,18 +53,19 @@ public class MemberController
         try
         {
             responseDto = memberService.login(loginRequestDto);
-
         }
         catch (MemberNotFoundException | BadCredentialsException e)
         {
-            // 이메일 불일치, 비밀번호 불일치 모두 401 Unauthorized 및 동일 메시지 반환
+            // 이메일 불일치, 비밀번호 불일치 오류는 401 반환
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("이메일 또는 비밀번호가 일치하지 않습니다.");
         }
         catch (Exception e)
         {
+            // 500 오류 시, 상세한 오류 정보를 반환하여 디버깅을 돕습니다. (임시 코드)
+            e.printStackTrace(); // 서버 콘솔에 스택 트레이스를 출력
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("로그인 처리 중 서버 오류가 발생했습니다.");
+                    .body("서버 오류 발생: " + e.getMessage()); // Postman에 오류 메시지 노출
         }
 
         return ResponseEntity.ok(responseDto);
