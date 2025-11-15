@@ -26,17 +26,21 @@ public class MemberService {
 
         String hashedPassword = passwordEncoder.encode(requestDto.password());
 
-        Member member = Member.builder()
-                .memberId(requestDto.memberId())
-                .nickname(requestDto.nickname())
-                .password(hashedPassword)
-                .email(requestDto.email())
-                .phone(requestDto.phone())
-                .gender(requestDto.gender())
-                .build();
+
+        Member member = new Member(
+                null, // id (DB에서 자동 생성되므로 null 전달)
+                requestDto.memberId(),
+                requestDto.nickname(),
+                hashedPassword,
+                requestDto.email(),
+                requestDto.phone(),
+                requestDto.gender(),
+                null // attandenceList (생성 시에는 null 또는 new ArrayList() 전달)
+        );
 
         memberRepository.save(member);
 
+        // 생성자 호출 후 ID가 자동 생성되어 member 객체에 반영됨
         return new MemberResponseDto(
                 member.getId(),
                 member.getMemberId(),
