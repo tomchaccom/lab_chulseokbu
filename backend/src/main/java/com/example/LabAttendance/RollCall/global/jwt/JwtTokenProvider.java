@@ -4,7 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders; // Base64 디코더를 위해 필요합니다.
+import io.jsonwebtoken.io.Decoders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -17,30 +17,27 @@ import java.util.Base64;
 @Component
 public class JwtTokenProvider {
 
-    // [중요 수정]: Base64 디코딩 오류를 방지하기 위해, Secret Key 자체를 Base64 인코딩된 문자열로 정의합니다.
-    // Base64 인코딩된 문자열은 'a' 대신 'b'와 같이 안전한 문자로만 구성됩니다.
-    // HS256 알고리즘 사용을 위해 최소 32바이트(256비트) 이상이어야 합니다.
-    private final String SECRET_KEY = Base64.getEncoder().encodeToString("MySuperSecretKeyForJwt1234567890!@#MySuperSecretKeyLongerThan32Bytes".getBytes());
+    private final String SECRET_KEY = Base64.getEncoder().encodeToString(
+            "MySuperSecretKeyForJwt1234567890!@#MySuperSecretKeyLongerThan32Bytes".getBytes()
+    );
 
-    private final long EXPIRATION = 1000 * 60 * 60 * 24; // 24시간
+    private final long EXPIRATION = 1000 * 60 * 60 * 1; // 24시간
 
     private Key getSigningKey() {
-        // Base64 문자열을 디코딩하여 바이트 배열을 얻고 Key 객체를 생성합니다.
-        // Base64 오류가 발생하지 않도록 안정적인 Decoders.BASE64를 사용합니다.
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(Long userId, String email) {
+    // JWT 생성 시 memberId claim 사용
+    public String generateToken(Long memberId, String email) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + EXPIRATION);
 
-        // Long 타입 ID를 String으로 변환하여 Claim에 추가 (Null 처리 및 안정성 확보)
-        String userIdString = (userId != null) ? userId.toString() : "";
+        String memberIdStr = (memberId != null) ? memberId.toString() : "";
 
         return Jwts.builder()
                 .setSubject(email)
-                .claim("userId", userIdString) // Long 대신 String으로 변경
+                .claim("memberId", memberIdStr) // userId -> memberId
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
@@ -66,10 +63,21 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody();
 
-        String email = claims.getSubject();
+        // claims에서 memberId 안전하게 가져오기
+        Object memberIdObj = claims.get("memberId");
+        Long memberId = null;
 
+        if (memberIdObj instanceof Number) {
+            memberId = ((Number) memberIdObj).longValue();
+        } else if (memberIdObj instanceof String str && !str.isBlank()) {
+            memberId = Long.valueOf(str);
+        } else {
+            throw new IllegalArgumentException("JWT에 유효한 memberId가 존재하지 않습니다.");
+        }
+
+        // principal에 memberId 넣기
         return new UsernamePasswordAuthenticationToken(
-                email,
+                memberId,
                 "",
                 Collections.emptyList()
         );

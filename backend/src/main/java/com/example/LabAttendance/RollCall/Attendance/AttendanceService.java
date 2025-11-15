@@ -32,6 +32,8 @@ public class AttendanceService {
         }
 
         entity.startCount();
+        entity.checkInMember(member);
+        attendanceRepository.save(entity);
     }
 
 
@@ -47,6 +49,7 @@ public class AttendanceService {
         }
 
         entity.calculateAttendance(LocalTime.now());
+        attendanceRepository.save(entity);
     }
 
 

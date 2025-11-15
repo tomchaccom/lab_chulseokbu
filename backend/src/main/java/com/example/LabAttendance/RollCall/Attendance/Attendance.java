@@ -36,6 +36,9 @@ public class Attendance {
         this.startTime = LocalTime.now();
         this.total = 0L;
     }
+    protected void checkInMember(Member member) {
+        this.member = member;
+    }
 
     // 객체 호출 시점에 사용하기
     protected void startCount(){
