@@ -1,7 +1,8 @@
 package com.example.LabAttendance.RollCall.Member;
 
 import com.example.LabAttendance.RollCall.Member.DTO.*;
-import com.example.LabAttendance.RollCall.global.*;
+import com.example.LabAttendance.RollCall.global.Exception.DuplicateEmailException;
+import com.example.LabAttendance.RollCall.global.Exception.MemberNotFoundException;
 import com.example.LabAttendance.RollCall.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
