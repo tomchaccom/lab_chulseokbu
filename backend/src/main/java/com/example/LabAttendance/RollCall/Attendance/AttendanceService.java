@@ -21,16 +21,19 @@ public class AttendanceService {
     // 내이름으로 만들어진 오늘 날짜의 출석 정보가 존재하면 start 사용 아니면 생성
     public void checkInLab(long memberId) {
         Member member = memberRepository.findById(memberId).orElse(null);
+        Attendance entity;
 
         if (member == null) {
-            Attendance attendance = new Attendance();
-            attendanceRepository.save(attendance);
+            entity = new Attendance();
+            attendanceRepository.save(entity);
+        } else {
+            entity = attendanceRepository.findByMemberIdAndDate(memberId, LocalDate.now())
+                    .orElse(new Attendance());
         }
-        // null 값이 아니면 오늘 날짜와, member ID로 된 인스턴스를 검색
-        Attendance entity = attendanceRepository.findByMemberIdAndDate(memberId, LocalDate.now())
-                .orElse(null);
+
         entity.startCount();
     }
+
 
     public void checkOutLab(long memberId) throws NotAttendanceTodayException {
         Member member = memberRepository.findById(memberId)
