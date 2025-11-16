@@ -59,7 +59,7 @@ class AttendanceServiceTest {
 
         attendanceService.checkInLab(1L);
 
-        verify(attendance).startCount();
+        verify(attendance).startCount(LocalTime.now());
     }
 
     @Test

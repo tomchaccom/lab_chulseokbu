@@ -24,4 +24,12 @@ public class InOut {
     @Column(nullable = false)
     private LocalTime endTime;
 
+    public void checkStart(Attendance attendance, LocalTime startTime) {
+        this.attendance = attendance;
+        this.startTime = startTime;
+    }
+    public void checkEnd(LocalTime endTime) {
+        this.endTime = endTime;
+    }
+
 }

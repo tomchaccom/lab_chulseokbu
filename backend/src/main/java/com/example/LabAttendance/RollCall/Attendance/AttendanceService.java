@@ -1,5 +1,7 @@
 package com.example.LabAttendance.RollCall.Attendance;
 
+import com.example.LabAttendance.RollCall.InOut.InOut;
+import com.example.LabAttendance.RollCall.InOut.InOutRepository;
 import com.example.LabAttendance.RollCall.Member.Member;
 import com.example.LabAttendance.RollCall.Member.MemberRepository;
 import com.example.LabAttendance.RollCall.global.Exception.NotAttendanceTodayException;
@@ -16,12 +18,15 @@ public class AttendanceService {
 
     private final AttendanceRepository attendanceRepository;
     private final MemberRepository memberRepository;
+    private final InOutRepository inOutRepository;
 
     // 체크인 로직
     // 내이름으로 만들어진 오늘 날짜의 출석 정보가 존재하면 start 사용 아니면 생성
-    public void checkInLab(long memberId) {
+    public Long checkInLab(long memberId) {
         Member member = memberRepository.findById(memberId).orElse(null);
         Attendance entity;
+
+        LocalTime time = LocalTime.now();
 
         if (member == null) {
             entity = new Attendance();
@@ -30,10 +35,15 @@ public class AttendanceService {
             entity = attendanceRepository.findByMemberIdAndDate(memberId, LocalDate.now())
                     .orElse(new Attendance());
         }
+        InOut inOut = new InOut();
+        inOut.checkStart(entity,time);
 
-        entity.startCount();
+        entity.startCount(time);
         entity.checkInMember(member);
+
         attendanceRepository.save(entity);
+        InOut savedIn = inOutRepository.save(inOut);
+        return savedIn.getId();
     }
 
 

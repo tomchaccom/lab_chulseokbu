@@ -41,8 +41,8 @@ public class Attendance {
     }
 
     // 객체 호출 시점에 사용하기
-    protected void startCount(){
-        this.startTime = LocalTime.now();
+    protected void startCount(LocalTime startTime) {
+        this.startTime = startTime;
     }
     // 누적 시간의 합을 구하는 메소드
     protected void calculateAttendance(LocalTime endTime){

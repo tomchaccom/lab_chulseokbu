@@ -2,6 +2,7 @@ package com.example.LabAttendance.RollCall.Attendance;
 
 
 import com.example.LabAttendance.RollCall.global.Exception.NotAttendanceTodayException;
+import com.example.LabAttendance.RollCall.global.ResponneType.ApiResponse;
 import com.example.LabAttendance.RollCall.global.ResponneType.NoDataApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,14 +20,15 @@ public class AttendanceController {
     private final AttendanceService attendanceService;
 
     @PostMapping("/in")
-    public ResponseEntity<NoDataApiResponse> checkIn(
+    public ResponseEntity<ApiResponse<Long>> checkIn(
             @AuthenticationPrincipal Long memberId)
             {
         attendanceService.checkInLab(memberId);
 
         return ResponseEntity.status(200)
-                .body(NoDataApiResponse.success("체크인 되었습니다."));
+                .body(ApiResponse.success(attendanceService.checkInLab(memberId),"체크인 되었습니다."));
     }
+
     @PostMapping("/out")
     public ResponseEntity<NoDataApiResponse> checkOut(
             @AuthenticationPrincipal Long memberId
