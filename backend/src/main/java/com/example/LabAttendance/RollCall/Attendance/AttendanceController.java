@@ -1,16 +1,14 @@
 package com.example.LabAttendance.RollCall.Attendance;
 
 
+import com.example.LabAttendance.RollCall.global.Exception.AlreadyCheckInException;
 import com.example.LabAttendance.RollCall.global.Exception.NotAttendanceTodayException;
 import com.example.LabAttendance.RollCall.global.ResponneType.ApiResponse;
 import com.example.LabAttendance.RollCall.global.ResponneType.NoDataApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,18 +21,21 @@ public class AttendanceController {
     public ResponseEntity<ApiResponse<Long>> checkIn(
             @AuthenticationPrincipal Long memberId)
             {
-        attendanceService.checkInLab(memberId);
-
-        return ResponseEntity.status(200)
-                .body(ApiResponse.success(attendanceService.checkInLab(memberId),"체크인 되었습니다."));
+        try{
+            return ResponseEntity.status(200)
+                    .body(ApiResponse.success(attendanceService.checkInLab(memberId),"체크인 되었습니다."));
+        }catch (AlreadyCheckInException e){
+            return ResponseEntity.status(400).body(ApiResponse.failure(e.getMessage()));
+        }
     }
 
-    @PostMapping("/out")
+    @PostMapping("/out/{inout_id}")
     public ResponseEntity<NoDataApiResponse> checkOut(
-            @AuthenticationPrincipal Long memberId
+            @AuthenticationPrincipal Long memberId,
+            @PathVariable(name ="inout_id") Long inoutId
     ){
         try{
-            attendanceService.checkOutLab(memberId);
+            attendanceService.checkOutLab(memberId, inoutId);
             return ResponseEntity.status(200)
                     .body(NoDataApiResponse.success("체크아웃 되었습니다"));
         }catch (NotAttendanceTodayException e){

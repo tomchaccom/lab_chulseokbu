@@ -21,7 +21,7 @@ public class InOut {
     @Column(nullable = false)
     private LocalTime startTime;
 
-    @Column(nullable = false)
+
     private LocalTime endTime;
 
     public void checkStart(Attendance attendance, LocalTime startTime) {
