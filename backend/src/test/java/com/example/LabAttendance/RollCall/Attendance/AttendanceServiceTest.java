@@ -42,7 +42,6 @@ class AttendanceServiceTest {
         ReflectionTestUtils.setField(member, "id", 1L);
         ReflectionTestUtils.setField(member, "memberId", 20250001L);
         ReflectionTestUtils.setField(member, "nickname", "Tom");
-        ReflectionTestUtils.setField(member, "password", "pass123");
         ReflectionTestUtils.setField(member, "email", "tom@test.com");
         ReflectionTestUtils.setField(member, "phone", "01012345678");
         ReflectionTestUtils.setField(member, "gender", Gender.MALE);
