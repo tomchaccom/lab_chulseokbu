@@ -3,6 +3,7 @@ package com.example.LabAttendance.RollCall.global.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -16,10 +17,11 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
+    private final Key key;
 
-    private final Key key = Keys.hmacShaKeyFor(
-            "MySuperSecretKeyForJwt1234567890!@#MySuperSecretKeyLongerThan32Bytes".getBytes(StandardCharsets.UTF_8)
-    );
+    public JwtTokenProvider(@Value("${jwt.secret}") String secret) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    }
 
     private final long EXPIRATION = 1000 * 60 * 60 * 1; // 1시간
 

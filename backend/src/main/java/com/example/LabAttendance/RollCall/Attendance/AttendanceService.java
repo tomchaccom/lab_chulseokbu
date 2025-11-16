@@ -58,9 +58,9 @@ public class AttendanceService {
 
     public void checkOutLab(long memberId, long inoutId) throws NotAttendanceTodayException {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() ->new EntityNotFoundException("Member not found"));
+                .orElseThrow(() ->new EntityNotFoundException("로그인 먼저 진행해 주세요"));
         InOut inOut = inOutRepository.findById(inoutId)
-                .orElseThrow(() ->new EntityNotFoundException("InOut not found"));
+                .orElseThrow(() ->new EntityNotFoundException("출입 내역이 없습니다"));
 
         LocalTime end = LocalTime.now();
         if (inOut.getAttendance().getStatus() != AttendanceStatus.IN){

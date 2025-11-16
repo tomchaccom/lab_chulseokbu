@@ -5,6 +5,7 @@ import com.example.LabAttendance.RollCall.global.Exception.AlreadyCheckInExcepti
 import com.example.LabAttendance.RollCall.global.Exception.NotAttendanceTodayException;
 import com.example.LabAttendance.RollCall.global.ResponneType.ApiResponse;
 import com.example.LabAttendance.RollCall.global.ResponneType.NoDataApiResponse;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -41,6 +42,10 @@ public class AttendanceController {
         }catch (NotAttendanceTodayException e){
             return ResponseEntity.status(400)
                     .body(NoDataApiResponse.failure("체크인 먼저 진행해주세요"));
+        }catch (AlreadyCheckInException e){
+            return ResponseEntity.status(400).body(NoDataApiResponse.failure(e.getMessage()));
+        }catch(EntityNotFoundException e){
+            return ResponseEntity.status(404).body(NoDataApiResponse.failure(e.getMessage()));
         }
     }
 
