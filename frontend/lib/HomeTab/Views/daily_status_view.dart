@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 // 1. 출석 기록을 위한 간단한 데이터 모델
 class AttendanceRecord {
   final String date;
@@ -224,6 +223,17 @@ class _MemberAttendanceCardState extends State<MemberAttendanceCard> {
         borderRadius: BorderRadius.circular(12),
       ),
       child: ExpansionTile(
+        // --- ⬇️ 요청하신 수정 사항 적용 ⬇️ ---
+        onExpansionChanged: (bool isExpanding) {
+          // 타일이 닫힐 때 (isExpanding이 false가 될 때)
+          if (!isExpanding) {
+            // '더 보기' 상태를 초기화(false)시켜 '간략히 보기'로 되돌립니다.
+            setState(() {
+              _isSeeMoreClicked = false;
+            });
+          }
+        },
+        // --- ⬆️ 여기까지 ⬆️ ---
         title: Row(
           children: [
             CircleAvatar(
