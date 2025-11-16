@@ -11,14 +11,17 @@ import java.time.LocalTime;
 public class InOut {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne()
     @JoinColumn(name ="attendance_id")
     private Attendance attendance;
 
-    @Column(name="start")
+    @Column(nullable = false)
     private LocalTime startTime;
 
-    @Column(name="end")
+    @Column(nullable = false)
     private LocalTime endTime;
 
 }
