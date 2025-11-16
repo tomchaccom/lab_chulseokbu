@@ -1,23 +1,23 @@
 package com.example.LabAttendance.RollCall.global.jwt;
 
-import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+@Component
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
 
     @Override
     protected void doFilterInternal(
@@ -26,13 +26,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
 
-        // 로그인, 회원가입 경로는 JWT 인증을 건너뛰게 함
-        if (request.getRequestURI().equals("/lab/users/sign") || request.getRequestURI().equals("/lab/users/login")) {
+        if (request.getRequestURI().equals("/lab/users/sign") ||
+                request.getRequestURI().equals("/lab/users/login")
+        ) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // JWT 인증 처리
         String token = resolveToken(request);
 
         if (token != null && jwtTokenProvider.validateToken(token)) {
@@ -47,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String header = request.getHeader("Authorization");
 
         if (header != null && header.startsWith("Bearer ")) {
-            return header.substring(7);  // Bearer 부분을 제거하고 토큰만 반환
+            return header.substring(7);
         }
 
         return null;
