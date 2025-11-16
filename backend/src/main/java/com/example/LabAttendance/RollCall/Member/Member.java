@@ -21,7 +21,7 @@ public class Member {
     private Long id;
 
     @Column(nullable = false)
-    private Long memberId; // 학번
+    private Long memberNum; // 학번
 
     @Column(nullable = false)
     private String nickname;

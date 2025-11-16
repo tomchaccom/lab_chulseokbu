@@ -44,7 +44,7 @@ public class MemberService {
         // 생성자 호출 후 ID가 자동 생성되어 member 객체에 반영됨
         return new MemberResponseDto(
                 member.getId(),
-                member.getMemberId(),
+                member.getMemberNum(),
                 member.getNickname(),
                 member.getEmail()
         );
