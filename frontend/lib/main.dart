@@ -1,36 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/HomeTab/Views/InOutStateView.dart';
+import 'package:frontend/MemberTab/MemberStateView.dart';
+import 'package:frontend/TabBar/Shared_widgets.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
+const BGC = Color(0xFFFFFFFF);
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
+
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: '랩실 출석부',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: BGC),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: '랩실 출석부'),
     );
   }
 }
@@ -54,69 +46,64 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  // ⭐ 1. 현재 선택된 탭의 인덱스를 상태로 관리합니다. (홈: 0, 구성원: 1, 잔류현황: 2)
+  int _selectedIndex = 0;
 
-  void _incrementCounter() {
+  // ⭐ 2. 탭에 따라 body에 표시할 위젯 목록을 정의합니다.
+  static final List<Widget> _widgetOptions = <Widget>[
+    // [0] 홈 화면 (기존 MyHomePage의 body 내용)
+    ListView(
+      children: const <Widget>[
+        // LabStatusCard는 이 파일 또는 다른 파일에 정의되어 있어야 합니다.
+        LabStatusCard(),
+      ],
+    ),
+
+    // [1] 구성원 화면 (MemberStateView.dart의 내용물)
+    // AttendanceViewScreenContent는 Scaffold, AppBar, BottomBar가 없는 순수 내용물입니다.
+    const AttendanceViewScreenContent(),
+
+    // [2] 잔류현황 화면 (임시 위젯)
+    const Center(
+      child: Text(
+        '잔류현황 화면 내용',
+        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+      ),
+    ),
+  ];
+
+  // ⭐ 3. BottomNavigationBar 탭 클릭 시 인덱스 업데이트 함수
+  void _onItemTapped(int index) {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter--;
+      _selectedIndex = index;
     });
   }
 
+  // 이전의 _navigateToMemberStateView 함수는 이제 필요 없습니다.
+
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    // 현재 선택된 인덱스에 따라 AppBar의 타이틀을 변경할 수 있습니다.
+    String currentTitle = widget.title;
+    if (_selectedIndex == 1) {
+      currentTitle = '출석뷰'; // 구성원 탭을 눌렀을 때 타이틀 변경
+    }
+
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        backgroundColor: BGC,
+        title: Text(currentTitle),
+        // 필요하다면 앱바의 Actions(오른쪽 상단)도 여기에 배치할 수 있습니다.
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
+
+      // ⭐ 4. body에 현재 선택된 인덱스의 위젯을 표시합니다.
+      body: _widgetOptions.elementAt(_selectedIndex),
+
+      // ⭐ 5. BottomNavigationBar를 CustomBottomNavBar로 연결
+      bottomNavigationBar: CustomBottomNavBar(
+        currentIndex: _selectedIndex, // 현재 인덱스를 BottomBar에 전달
+        onItemSelected: _onItemTapped, // 클릭 이벤트를 _onItemTapped에 연결
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Decrement',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
