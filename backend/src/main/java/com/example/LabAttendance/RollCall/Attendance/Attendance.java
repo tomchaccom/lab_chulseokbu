@@ -26,25 +26,41 @@ public class Attendance {
 
     private Long total; // 객체 생성 시점에 0으로 할당.
 
+    private AttendanceStatus status;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="member_id")
+    @JoinColumn(name = "member_id")
     private Member member;
-    // 처음 객체를 생성할 때
-    @PrePersist
+
     protected void onCreate() {
         this.date = LocalDate.now();
         this.startTime = LocalTime.now();
         this.total = 0L;
+        this.status = AttendanceStatus.IN;
+    }
+
+    protected void checkInMember(Member member) {
+        this.member = member;
     }
 
     // 객체 호출 시점에 사용하기
-    protected void startCount(){
-        this.startTime = LocalTime.now();
+    protected void startCount(LocalTime startTime) {
+        this.startTime = startTime;
     }
+
     // 누적 시간의 합을 구하는 메소드
-    protected void calculateAttendance(LocalTime endTime){
+    protected void calculateAttendance(LocalTime endTime) {
         long minutes = java.time.Duration.between(this.startTime, endTime).toMinutes();
         this.total += minutes; // 누적
     }
 
+    protected void toggleAttendance() {
+        if (this.status == AttendanceStatus.IN) {
+            this.status = AttendanceStatus.OUT;
+        } else if (this.status == AttendanceStatus.OUT) {
+            this.status = AttendanceStatus.IN;
+
+        }
+
+    }
 }

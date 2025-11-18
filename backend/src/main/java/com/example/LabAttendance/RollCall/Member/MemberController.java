@@ -2,6 +2,8 @@ package com.example.LabAttendance.RollCall.Member;
 
 import com.example.LabAttendance.RollCall.Member.DTO.MemberSignupRequestDto;
 
+import com.example.LabAttendance.RollCall.global.Exception.DuplicateEmailException;
+import com.example.LabAttendance.RollCall.global.Exception.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import jakarta.validation.Valid;
 import com.example.LabAttendance.RollCall.Member.DTO.*;
-import com.example.LabAttendance.RollCall.global.*;
 import org.springframework.security.authentication.BadCredentialsException;
 
 @RestController

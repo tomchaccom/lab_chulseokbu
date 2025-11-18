@@ -1,7 +1,8 @@
 package com.example.LabAttendance.RollCall.Member;
 
 import com.example.LabAttendance.RollCall.Member.DTO.*;
-import com.example.LabAttendance.RollCall.global.*;
+import com.example.LabAttendance.RollCall.global.Exception.DuplicateEmailException;
+import com.example.LabAttendance.RollCall.global.Exception.MemberNotFoundException;
 import com.example.LabAttendance.RollCall.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -43,7 +44,7 @@ public class MemberService {
         // 생성자 호출 후 ID가 자동 생성되어 member 객체에 반영됨
         return new MemberResponseDto(
                 member.getId(),
-                member.getMemberId(),
+                member.getMemberNum(),
                 member.getNickname(),
                 member.getEmail()
         );
