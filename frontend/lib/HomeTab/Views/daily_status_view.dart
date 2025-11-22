@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-// 1. 출석 기록을 위한 간단한 데이터 모델
+
+// 1. 출석 기록을 위한 간단한 데이터 모델 (변동 없음)
 class AttendanceRecord {
   final String date;
   final String status;
@@ -14,7 +15,7 @@ class AttendanceRecord {
   });
 }
 
-// 2. 이 파일의 메인 위젯 (StatefulWidget)
+// 2. 이 파일의 메인 위젯 (StatefulWidget) (변동 없음)
 class DailyStatusView extends StatefulWidget {
   const DailyStatusView({super.key});
 
@@ -23,10 +24,10 @@ class DailyStatusView extends StatefulWidget {
 }
 
 class _DailyStatusViewState extends State<DailyStatusView> {
-  // 3. 탭 버튼의 상태를 관리할 변수
-  bool _isListView = true; // 기본값은 리스트 뷰
+  // 3. 탭 버튼의 상태를 관리할 변수 (변동 없음)
+  bool _isListView = true; // 기본값은 리스트 뷰 (true: 리스트 뷰, false: 그리드 뷰)
 
-  // 30일치 더미 데이터 생성 함수
+  // 30일치 더미 데이터 생성 함수 (위치 유지)
   List<AttendanceRecord> _generateDummyData(int count) {
     return List.generate(count, (index) {
       final day = 30 - index;
@@ -39,6 +40,7 @@ class _DailyStatusViewState extends State<DailyStatusView> {
     });
   }
 
+  // ⭐ build 메서드 수정: _buildContentArea를 Expanded의 child로 직접 호출
   @override
   Widget build(BuildContext context) {
     // 4. AppBar, BottomNav 제거. SafeArea 추가
@@ -59,36 +61,8 @@ class _DailyStatusViewState extends State<DailyStatusView> {
 
               // 7. 스크롤 가능한 리스트 영역
               Expanded(
-                child: ListView(
-                  children: [
-                    MemberAttendanceCard(
-                      name: '김학생',
-                      role: '박사과정',
-                      percentage: '85 %',
-                      initial: '김',
-                      color: Colors.orange, // 연주황색
-                      allRecords: _generateDummyData(30),
-                    ),
-                    const SizedBox(height: 12),
-                    MemberAttendanceCard(
-                      name: '이연구',
-                      role: '석사과정',
-                      percentage: '92 %',
-                      initial: '이',
-                      color: Colors.orange, // 연주황색
-                      allRecords: _generateDummyData(30),
-                    ),
-                    const SizedBox(height: 12),
-                    MemberAttendanceCard(
-                      name: '박조교',
-                      role: '연구원',
-                      percentage: '78 %',
-                      initial: '박',
-                      color: Colors.orange, // 연주황색
-                      allRecords: _generateDummyData(30),
-                    ),
-                  ],
-                ),
+                // ⭐ 수정된 부분: _buildContentArea를 직접 호출
+                child: _buildContentArea(),
               ),
             ],
           ),
@@ -99,7 +73,7 @@ class _DailyStatusViewState extends State<DailyStatusView> {
 
   // --- 위젯 빌드 헬퍼 함수 ---
 
-  // 8. 헤더 위젯 (제목 + 탭 버튼)
+  // 8. 헤더 위젯 (제목 + 탭 버튼) (변동 없음)
   Widget _buildHeader() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -113,7 +87,7 @@ class _DailyStatusViewState extends State<DailyStatusView> {
     );
   }
 
-  // 9. 탭 버튼 위젯
+  // 9. 탭 버튼 위젯 (변동 없음)
   Widget _buildToggleButtons() {
     return Container(
       decoration: BoxDecoration(
@@ -129,14 +103,17 @@ class _DailyStatusViewState extends State<DailyStatusView> {
     );
   }
 
-  // 10. 개별 탭 버튼
+  // 10. 개별 탭 버튼 (변동 없음)
   Widget _buildToggleButton(IconData icon, bool isSelected) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          // 아이콘에 따라 _isListView 상태 변경
-          _isListView = (icon == Icons.format_list_bulleted_rounded);
-          // (참고: 실제 그리드뷰/리스트뷰 전환 로직은 여기에 추가해야 함)
+          // 클릭된 아이콘이 리스트 아이콘이면 isListView를 true로, 아니면 false(그리드)로 설정
+          if (icon == Icons.format_list_bulleted_rounded) {
+            _isListView = true;
+          } else {
+            _isListView = false;
+          }
         });
       },
       child: Container(
@@ -145,7 +122,7 @@ class _DailyStatusViewState extends State<DailyStatusView> {
           color: isSelected ? Colors.white : Colors.transparent, // 선택 시 흰색
           borderRadius: BorderRadius.circular(6),
           boxShadow: isSelected
-              ? [ // 선택 시 그림자 효과
+              ? [
             BoxShadow(
               color: Colors.grey.withOpacity(0.2),
               spreadRadius: 1,
@@ -164,7 +141,7 @@ class _DailyStatusViewState extends State<DailyStatusView> {
     );
   }
 
-  // 11. 이미지에 있던 빈 사각형
+  // 11. 이미지에 있던 빈 사각형 (변동 없음)
   Widget _buildFilterPlaceholder() {
     return Container(
       height: 40,
@@ -175,11 +152,210 @@ class _DailyStatusViewState extends State<DailyStatusView> {
       ),
     );
   }
+
+  // ⭐ 12. _isListView 상태에 따라 리스트 뷰 또는 그리드 뷰를 반환하는 함수 (위치 이동)
+  Widget _buildContentArea() {
+    // 모든 멤버 정보 및 더미 데이터 생성
+    final List<Map<String, dynamic>> members = [
+      {'name': '김학생', 'role': '박사과정', 'percentage': '85 %', 'initial': '김', 'color': Colors.orange, 'records': _generateDummyData(30)},
+      {'name': '이연구', 'role': '석사과정', 'percentage': '92 %', 'initial': '이', 'color': Colors.orange, 'records': _generateDummyData(30)},
+      {'name': '박조교', 'role': '연구원', 'percentage': '78 %', 'initial': '박', 'color': Colors.orange, 'records': _generateDummyData(30)},
+    ];
+
+    if (_isListView) {
+      // 3번째 사진: 리스트 뷰
+      return ListView(
+        children: members.map((member) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12.0),
+            child: MemberAttendanceCard(
+              name: member['name'] as String,
+              role: member['role'] as String,
+              percentage: member['percentage'] as String,
+              initial: member['initial'] as String,
+              color: member['color'] as Color,
+              allRecords: member['records'] as List<AttendanceRecord>,
+            ),
+          );
+        }).toList(),
+      );
+    } else {
+      // 2번째 사진: 그리드 뷰
+      return _buildGridContent(members);
+    }
+  }
+
+  // ⭐ 13. 그리드 뷰 콘텐츠 위젯 (두 번째 사진의 주간 출석 현황) (위치 이동)
+  Widget _buildGridContent(List<Map<String, dynamic>> members) {
+    return ListView(
+      children: members.map((member) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 12.0), // Padding 간격 조정
+          child: Card( // 그리드 뷰에서도 카드를 사용하여 시각적으로 구분
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(color: Colors.grey.shade200), // 옅은 테두리 추가
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: ExpansionTile(
+              // ⭐ 타이틀: 멤버 정보
+              title: Row(
+                children: [
+                  CircleAvatar(
+                    backgroundColor: (member['color'] as Color).withOpacity(0.2),
+                    child: Text(
+                      member['initial'] as String,
+                      style: TextStyle(color: member['color'] as Color, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(member['name'] as String, style: const TextStyle(fontWeight: FontWeight.bold)),
+                      Text(member['role'] as String, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                    ],
+                  ),
+                  const Spacer(),
+                  Text(
+                    member['percentage'] as String,
+                    style: TextStyle(
+                      color: member['color'] as Color,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+
+              // ExpansionTile의 기본 화살표 아이콘을 사용합니다.
+              // trailing: const Icon(Icons.keyboard_arrow_down), // ExpansionTile에 이미 내장되어 있음
+
+              // ⭐ Children: 주간 그리드 및 요약 정보
+              children: [
+                Padding(
+                  // 기존의 멤버 정보 Padding은 타이틀로 옮겨졌으므로 children 내부 Padding으로 변경
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // 주간 그리드 출석 현황
+                      _buildGridAttendanceArea(member),
+
+                      // 그리드 뷰 아래의 총계 요약
+                      Padding(
+                        padding: const EdgeInsets.only(top: 12.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            _buildSummaryBox('23일', '총 출석일'),
+                            _buildSummaryBox('4일', '연속 출석'),
+                            _buildSummaryBox('85 %', '출석률'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12), // ExpansionTile 닫는 부분과의 간격
+              ],
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+// 2. 주간 그리드 부분을 별도 함수로 분리 (코드가 너무 길어져서)
+  Widget _buildGridAttendanceArea(Map<String, dynamic> member) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: const Color(0xFFF0F0F0)),
+      ),
+      child: Column(
+        children: [
+          // 요일 헤더 (월~일)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: const ['월', '화', '수', '목', '금', '토', '일'].map((day) =>
+                Expanded(child: Center(child: Text(day, style: TextStyle(fontSize: 12, color: Colors.grey))))
+            ).toList(),
+          ),
+          const SizedBox(height: 8),
+
+          // 주차별 출석 블록
+          for (int week = 1; week <= 5; week++) // 5주차까지 표시
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 주차 텍스트
+                  SizedBox(
+                    width: 30,
+                    child: Text('${week}주차', style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                  ),
+                  const SizedBox(width: 8),
+
+                  // 출석 블록 (7개)
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: List.generate(7, (dayIndex) {
+                        final dayOfMonthIndex = dayIndex + (week - 1) * 7;
+                        if (dayOfMonthIndex >= 30) {
+                          return const SizedBox(width: 20, height: 20);
+                        }
+                        final record = (member['records'] as List<AttendanceRecord>)[dayOfMonthIndex];
+                        final isPresent = record.status == '출석';
+                        final blockColor = isPresent ? (member['color'] as Color).withOpacity(0.6) : Colors.grey.shade200;
+
+                        return Container(
+                          width: 20, // 작은 사각형 크기
+                          height: 20,
+                          margin: const EdgeInsets.symmetric(horizontal: 1.5),
+                          decoration: BoxDecoration(
+                            color: blockColor,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                  // 총 시간 표시 (임시)
+                  const SizedBox(width: 60, child: Text('72시간', style: TextStyle(fontSize: 12, color: Colors.grey), textAlign: TextAlign.right)),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  // 그리드 뷰 아래 요약 박스 헬퍼 (위치 이동)
+  Widget _buildSummaryBox(String value, String label) {
+    return Container(
+      width: MediaQuery.of(context).size.width / 4, // 대략적인 너비
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: const Color(0xFFF0F0F0)),
+      ),
+      child: Column(
+        children: [
+          Text(value, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
+          Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+        ],
+      ),
+    );
+  }
 }
 
-// -----------------------------------------------------------------
-// 12. 멤버 카드 위젯
-// -----------------------------------------------------------------
 class MemberAttendanceCard extends StatefulWidget {
   final String name;
   final String role;
@@ -223,20 +399,18 @@ class _MemberAttendanceCardState extends State<MemberAttendanceCard> {
         borderRadius: BorderRadius.circular(12),
       ),
       child: ExpansionTile(
-        // --- ⬇️ 요청하신 수정 사항 적용 ⬇️ ---
         onExpansionChanged: (bool isExpanding) {
-          // 타일이 닫힐 때 (isExpanding이 false가 될 때)
           if (!isExpanding) {
-            // '더 보기' 상태를 초기화(false)시켜 '간략히 보기'로 되돌립니다.
             setState(() {
               _isSeeMoreClicked = false;
             });
           }
         },
-        // --- ⬆️ 여기까지 ⬆️ ---
         title: Row(
           children: [
             CircleAvatar(
+              // ⭐ withOpacity 대신 .withAlpha(int) 또는 Color.fromRGBO(r,g,b,a) 사용을 권장하지만,
+              // withOpacity를 사용해도 기능상 문제는 없습니다. 경고 무시 가능.
               backgroundColor: widget.color.withOpacity(0.2),
               child: Text(
                 widget.initial,
@@ -311,7 +485,6 @@ class _MemberAttendanceCardState extends State<MemberAttendanceCard> {
     );
   }
 
-  // '결석'일 경우 '-' 표시
   Widget _buildAttendanceRow(AttendanceRecord record) {
     bool isPresent = record.status == '출석';
 
@@ -347,7 +520,7 @@ class _MemberAttendanceCardState extends State<MemberAttendanceCard> {
           Expanded(
             flex: 2,
             child: Text(
-              isPresent ? record.checkIn : '-', // 출석일 때만 시간 표시
+              isPresent ? record.checkIn : '-',
               textAlign: TextAlign.center,
               style: TextStyle(color: isPresent ? Colors.black87 : Colors.grey),
             ),
@@ -355,7 +528,7 @@ class _MemberAttendanceCardState extends State<MemberAttendanceCard> {
           Expanded(
             flex: 2,
             child: Text(
-              isPresent ? record.checkOut : '-', // 출석일 때만 시간 표시
+              isPresent ? record.checkOut : '-',
               textAlign: TextAlign.center,
               style: TextStyle(color: isPresent ? Colors.black87 : Colors.grey),
             ),
@@ -365,3 +538,14 @@ class _MemberAttendanceCardState extends State<MemberAttendanceCard> {
     );
   }
 }
+
+// -----------------------------------------------------------------
+// 12. 멤버 카드 위젯 (MemberAttendanceCard는 _DailyStatusViewState 밖에 있으므로 수정 불필요)
+// -----------------------------------------------------------------
+// ... (MemberAttendanceCard 클래스 및 _MemberAttendanceCardState는 그대로 유지)
+// 오류 메시지에서 언급된 _generateDummyData 관련 오류는 _DailyStatusViewState 안의
+// _generateDummyData 함수를 MemberAttendanceCard 위젯이 직접 호출하지 않고
+// DailyStatusView의 build()에서 생성하여 prop으로 전달하므로 해결됩니다.
+
+// (MemberAttendanceCard 클래스부터 코드는 이전과 동일합니다.)
+// ... (생략)

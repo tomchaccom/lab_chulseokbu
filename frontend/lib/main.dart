@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend/HomeTab/Views/InOutStateView.dart';
 import 'package:frontend/MemberTab/MemberStateView.dart';
 import 'package:frontend/TabBar/Shared_widgets.dart';
-
+import 'package:frontend/HomeTab/Views/NotificationView.dart';
+import 'package:frontend/HomeTab/Views/daily_status_view.dart';
+import 'package:frontend/HomeTab/Views/EditProfileView.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -49,29 +51,95 @@ class _MyHomePageState extends State<MyHomePage> {
   // ⭐ 1. 현재 선택된 탭의 인덱스를 상태로 관리합니다. (홈: 0, 구성원: 1, 잔류현황: 2)
   int _selectedIndex = 0;
 
+  String _currentName = '김학생';
+  String _currentStudentId = '20230123';
+  String _currentPhone = '010-1234-5678';
+  String _currentEmail = 'student@university.ac.kr';
+
+  void _showEditProfileDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        // EditProfileDialog 클래스를 사용합니다.
+        // EditProfileView.dart 파일이 import 되어 있어야 합니다.
+        return EditProfileDialog(
+          initialName: _currentName,
+          initialStudentId: _currentStudentId,
+          initialPhone: _currentPhone,
+          initialEmail: _currentEmail,
+          onSave: (newName, newId, newPhone, newEmail) async {
+            // 저장 로직: 상태 업데이트
+            if (mounted) {
+              setState(() {
+                _currentName = newName;
+                _currentStudentId = newId;
+                _currentPhone = newPhone;
+                _currentEmail = newEmail;
+              });
+              // 저장 완료 알림
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('프로필이 저장되었습니다.'), duration: Duration(seconds: 2)),
+              );
+            }
+          },
+        );
+      },
+    );
+  }
+
   // ⭐ 2. 탭에 따라 body에 표시할 위젯 목록을 정의합니다.
   static final List<Widget> _widgetOptions = <Widget>[
-    // [0] 홈 화면 (기존 MyHomePage의 body 내용)
-    ListView(
-      children: const <Widget>[
-        // LabStatusCard는 이 파일 또는 다른 파일에 정의되어 있어야 합니다.
-        LabStatusCard(),
-      ],
+    SingleChildScrollView( // <--- 홈 탭 전체를 스크롤 가능하게 만듦
+      padding: const EdgeInsets.all(16.0),
+      child: Column( // <--- Column으로 변경
+        crossAxisAlignment: CrossAxisAlignment.stretch, // 너비를 부모만큼 채우도록
+        children: const <Widget>[
+          // 1. 입/퇴실 상태 카드
+          LabStatusCard(),
+
+          SizedBox(height: 16), // 위젯 간 간격
+
+          // 2. 출석 현황 위젯 자리
+          SizedBox(
+            height: 150,
+            child: Center(
+              child: Text(
+                '출석 현황 위젯 자리',
+                style: TextStyle(fontSize: 18, color: Colors.grey),
+              ),
+            ),
+          ),
+
+          SizedBox(height: 16), // 위젯 간 간격
+
+          // 3. NotificationView (알림 목록)
+          // ListView 안에 ListView가 중첩되는 문제를 피하기 위해,
+          // NotificationView에 높이를 제한했던 것처럼 여기서도 제한된 높이를 유지합니다.
+          // 전체가 SingleChildScrollView 안에 있으므로, 이 위젯의 높이가 300을 초과하면
+          // 바깥쪽 SingleChildScrollView가 스크롤됩니다.
+          SizedBox(
+            height: 600,
+            child: NotificationView(),
+          ),
+
+          SizedBox(height: 20),
+          // 만약 여기에 더 많은 내용이 있다면, 스크롤 가능합니다.
+          Center(child: Text('스크롤 확인용 추가 내용', style: TextStyle(fontSize: 14, color: Colors.blueGrey))),
+          SizedBox(height: 100), // 스크롤 테스트를 위한 여백
+        ],
+      ),
     ),
 
-    // [1] 구성원 화면 (MemberStateView.dart의 내용물)
-    // AttendanceViewScreenContent는 Scaffold, AppBar, BottomBar가 없는 순수 내용물입니다.
-    const AttendanceViewScreenContent(),
+    // [1] 구성원 화면
+    // AttendanceViewScreenContent가 이미 스크롤 가능한 구조라면 그대로 둡니다.
+    const DailyStatusView(),
 
     // [2] 잔류현황 화면 (임시 위젯)
     const Center(
-      child: Text(
-        '잔류현황 화면 내용',
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-      ),
+      child: Text('잔류 현황 페이지', style: TextStyle(fontSize: 20)),
     ),
   ];
-
   // ⭐ 3. BottomNavigationBar 탭 클릭 시 인덱스 업데이트 함수
   void _onItemTapped(int index) {
     setState(() {
@@ -93,6 +161,37 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: BGC,
         title: Text(currentTitle),
+        actions: <Widget>[
+          GestureDetector(
+            onTap: _showEditProfileDialog,
+
+            // 4번째 사진(프로필 아이콘)과 유사한 형태의 위젯을 구성합니다.
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // '김학생' 텍스트 (옵션, '출석뷰' 화면에선 보임)
+                  if (_selectedIndex == 1) // 구성원 탭일 때만 텍스트를 보여준다고 가정
+                    const Text(
+                      '김학생',
+                      style: TextStyle(fontSize: 16, color: Colors.black),
+                    ),
+                  const SizedBox(width: 8), // 텍스트와 아이콘 간 간격
+                  // 원형 프로필 아이콘 ('김')
+                  const CircleAvatar(
+                    radius: 18,
+                    backgroundColor: Color(0xFFE68840), // 오렌지색 계열 (이미지 참고)
+                    child: Text(
+                      '김',
+                      style: TextStyle(color: BGC, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
         // 필요하다면 앱바의 Actions(오른쪽 상단)도 여기에 배치할 수 있습니다.
       ),
 
